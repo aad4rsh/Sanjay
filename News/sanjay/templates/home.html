@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Home Page {% endblock %}
+{% block content %}
+
+<h2>Setopati Headlines</h2>
+
+<h2>Setopati</h2>
+<div>
+{% for category in news_list %}
+    {% for news in category %}
+        <div class="news-card">
+            <h3>
+              <a href="{{ news.link }}" target="_blank">
+                {{ news.title }}
+              </a>
+            </h3>
+
+            {% if news.image %}
+                <img src="{{ news.image }}" width="300">
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endfor %}
+
+</div>
+    
+    
+{% endblock %}
