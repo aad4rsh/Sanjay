@@ -106,6 +106,7 @@ body {
     align-items: flex-end;
     max-width: 280px;
     scale: 4;
+    pointer-events: none;
 }
 
 .building-left {
@@ -130,6 +131,7 @@ body {
     max-height: 120px;
     object-fit: contain;
     opacity: 0.7;
+    pointer-events: none;
 }
 
 .search-btn {

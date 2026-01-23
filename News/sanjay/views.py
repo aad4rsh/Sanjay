@@ -20,7 +20,10 @@ def setopati_news():
         link = anchor.get('href')
 
         title_tag = anchor.find('span', class_='main-title')
-        title = title_tag.get_text(strip=True) if title_tag else "No Title"
+        title = title_tag.get_text(strip=True) if title_tag else None
+
+        if not title:
+            continue
 
         img_tag = anchor.find('img')
         img_url =""
@@ -52,7 +55,10 @@ def setopati_financial():
         link = anchor.get('href')
 
         title_tag = anchor.find('span', class_='main-title')
-        title = title_tag.get_text(strip=True) if title_tag else "No Title"
+        title = title_tag.get_text(strip=True) if title_tag else None
+
+        if not title:
+            continue
 
         img_tag = anchor.find('img')
         img_url =""
@@ -69,7 +75,41 @@ def setopati_financial():
 
     return combined_news
 
+def setopati_global():
+    resp = requests.get('https://www.setopati.com/global', headers={
+        'User-Agent': 'Mozilla/5.0'
+    })
+    soup = BeautifulSoup(resp.text, 'lxml')
+    news = soup.find_all("div", class_="items col-md-4")
+    combined_news=[]
+    for div in news:
+        anchor = div.find('a')
+        if not anchor:
+            continue
 
+        link = anchor.get('href')
+
+        title_tag = anchor.find('span', class_='main-title')
+        title = title_tag.get_text(strip=True) if title_tag else None
+
+        if not title:
+            continue
+
+        img_tag = anchor.find('img')
+        img_url =""
+        if img_tag:
+            img_url = img_tag.get('data-src') or img_tag.get('src')
+        
+
+       
+        combined_news.append({
+            'title':title,
+            'link': link,
+            'image': img_url,
+            'source': 'Setopati'
+        })
+
+    return combined_news
 def ekantipur_politics():
     resp = requests.get('https://ekantipur.com/politics', headers={
         'User-Agent': 'Mozilla/5.0'
@@ -127,6 +167,8 @@ def home(request):
     politics_news = setopati_news() + ekantipur_politics()
     random.shuffle(politics_news)
     financial_news = setopati_financial()
+    global_news = setopati_global()
+    random.shuffle(global_news)
     
     # General news mixes everything
     general_news = politics_news + financial_news
@@ -134,7 +176,8 @@ def home(request):
 
     return render(request, "home.html", {
         "politics_news": politics_news[:4],  # Only first 4 items
-        "financial_news": financial_news[:4],  # Only first 4 items
+        "financial_news": financial_news[:4], 
+        "global_news": global_news[:4] # Only first 4 items
     })
 
 def news_list(request, category):
@@ -146,6 +189,9 @@ def news_list(request, category):
     elif category == 'economy':
         news = setopati_financial()
         title = "Economy News"
+    elif  category  == 'global':
+        news = setopati_global()
+        title = "Global News"
     else:
         news = []
         title = "News"

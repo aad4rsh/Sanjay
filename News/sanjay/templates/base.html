@@ -60,9 +60,9 @@
     <nav class="main-nav">
         <div class="nav-links">
             <a href="{% url 'home' %}">POSTS <span class="dropdown-icon">+</span></a>
-            <a href="#world">WORLD <span class="dropdown-icon">+</span></a>
+            <a href="{%url 'news_list' 'global' %}">WORLD <span class="dropdown-icon">+</span></a>
             <a href="{% url 'news_list' 'politics' %}">POLITICS <span class="dropdown-icon">+</span></a>
-            <a href="#cooking">COOKING <span class="dropdown-icon">+</span></a>
+            <a href="{%url 'news_list' 'economy' %}">ECONOMY <span class="dropdown-icon">+</span></a>
             <a href="#interview">INTERVIEW <span class="dropdown-icon">+</span></a>
             <a href="#lifestyle">LIFESTYLE <span class="dropdown-icon">+</span></a>
         </div>

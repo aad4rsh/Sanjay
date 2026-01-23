@@ -60,12 +60,47 @@
         </h3>
       </div>
 
+
       <div class="news-footer">
         Setopati
       </div>
     </article>
     {% empty %}
     <p>No financial news available at the moment.</p>
+    {% endfor %}
+  </div>
+</div>
+
+<div id="global">
+  <div class="section-header">
+    <h2 class="section-title">Global</h2>
+    <a href="{% url 'news_list' 'global' %}" class="view-all-link">VIEW ALL »</a>
+  </div>
+
+  <div class="news-grid">
+    {% for news in global_news %}
+    <article class="news-card">
+      {% if news.image %}
+      <div class="news-image-container">
+        <img src="{{ news.image }}" alt="{{ news.title }}" class="news-image" loading="lazy">
+      </div>
+      {% endif %}
+
+      <div class="news-content">
+        <h3 class="news-title">
+          <a href="{{ news.link }}" target="_blank" class="news-link">
+            {{ news.title }}
+          </a>
+        </h3>
+      </div>
+
+
+      <div class="news-footer">
+        Setopati
+      </div>
+    </article>
+    {% empty %}
+    <p>No global news available at the moment.</p>
     {% endfor %}
   </div>
 </div>
