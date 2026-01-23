@@ -18,65 +18,41 @@
     <!-- Top Bar -->
     <div class="top-bar">
         <div class="top-bar-left">
-            <button class="icon-btn menu-btn">
+            <!-- <button class="icon-btn menu-btn">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <path d="M2 4h16M2 10h16M2 16h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
                 </svg>
-            </button>
-            <button class="icon-btn settings-btn">
+            </button> -->
+            <!-- <button class="icon-btn settings-btn">
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                     <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" stroke="currentColor" stroke-width="2" />
                     <path d="M16 10a6 6 0 11-12 0 6 6 0 0112 0z" stroke="currentColor" stroke-width="2" />
                 </svg>
-            </button>
+            </button> -->
         </div>
         <div class="top-bar-center">
             <span class="date-text">Today: {% now "F d, Y" %}</span>
         </div>
-        <div class="top-bar-right">
+        <!-- <div class="top-bar-right">
             <button class="subscribe-btn">SUBSCRIBE</button>
-        </div>
+        </div> -->
     </div>
 
     <!-- Header -->
     <header class="main-header">
-        <button class="search-btn">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
-                <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-            </svg>
-        </button>
+        <div class="building-left">
+            <img src="{% static 'img/building.svg' %}" alt="Building" class="building-image">
+        </div>
 
         <div class="header-main">
             <a href="{% url 'home' %}" class="brand">
                 SANJAY
             </a>
-            <p class="tagline">UNIQUE AND IMPRESSIVE NEWSPAPER WORDPRESS THEME. SINCE 2025</p>
+            <p class="tagline">ALL OF NEPAL'S NEWS IN ONE SIGHT</p>
         </div>
 
-        <div class="social-icons">
-            <a href="#" class="social-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                        d="M15.5 1h-11C2.57 1 1 2.57 1 4.5v11C1 17.43 2.57 19 4.5 19h11c1.93 0 3.5-1.57 3.5-3.5v-11C19 2.57 17.43 1 15.5 1zm-5.5 14c-3.03 0-5.5-2.47-5.5-5.5S6.97 4 10 4s5.5 2.47 5.5 5.5S13.03 15 10 15z" />
-                </svg>
-            </a>
-            <a href="#" class="social-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M11.8 3l-1.5 5h4.7l-1.2 1-5.8 7 1.5-6h-4.5l6.8-7z" />
-                </svg>
-            </a>
-            <a href="#" class="social-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                    <circle cx="10" cy="10" r="8" />
-                </svg>
-            </a>
-            <a href="#" class="social-icon">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                    <circle cx="10" cy="10" r="8" />
-                    <circle cx="10" cy="10" r="3" fill="white" />
-                </svg>
-            </a>
+        <div class="building-right">
+            <img src="{% static 'img/building.svg' %}" alt="Building" class="building-image">
         </div>
     </header>
 
@@ -85,7 +61,7 @@
         <div class="nav-links">
             <a href="{% url 'home' %}">POSTS <span class="dropdown-icon">+</span></a>
             <a href="#world">WORLD <span class="dropdown-icon">+</span></a>
-            <a href="#music">MUSIC <span class="dropdown-icon">+</span></a>
+            <a href="{% url 'news_list' 'politics' %}">POLITICS <span class="dropdown-icon">+</span></a>
             <a href="#cooking">COOKING <span class="dropdown-icon">+</span></a>
             <a href="#interview">INTERVIEW <span class="dropdown-icon">+</span></a>
             <a href="#lifestyle">LIFESTYLE <span class="dropdown-icon">+</span></a>

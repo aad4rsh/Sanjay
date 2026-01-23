@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} - Sanjay{% endblock %}
+{% block content %}
+
+<div class="news-list-container">
+  <div class="section-header">
+    <h2 class="section-title">{{ title }}</h2>
+    <a href="{% url 'home' %}" class="back-link">← Back to Home</a>
+  </div>
+
+  <div class="news-list-grid">
+    {% for news in news %}
+    <article class="news-list-card">
+      <div class="news-list-content-wrapper">
+        {% if news.image %}
+        <div class="news-list-image-container">
+          <img src="{{ news.image }}" alt="{{ news.title }}" class="news-list-image" loading="lazy">
+        </div>
+        {% endif %}
+
+        <div class="news-list-content">
+          <h3 class="news-list-title">
+            <a href="{{ news.link }}" target="_blank" class="news-link">
+              {{ news.title }}
+            </a>
+          </h3>
+          <div class="news-list-meta">
+            <span class="news-source">{{ news.source }}</span>
+          </div>
+        </div>
+      </div>
+    </article>
+    {% empty %}
+    <p>No news available at the moment.</p>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

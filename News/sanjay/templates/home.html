@@ -1,28 +1,73 @@
 {% extends "base.html" %}
-{% block title %}Home Page {% endblock %}
+{% block title %}Home - Sanjay News{% endblock %}
 {% block content %}
 
-<h2>Setopati Headlines</h2>
+<!-- Politics Section -->
+<div id="politics">
+  <div class="section-header">
+    <h2 class="section-title">Politics</h2>
+    <a href="{% url 'news_list' 'politics' %}" class="view-all-link">VIEW ALL »</a>
+  </div>
 
-<h2>Setopati</h2>
-<div>
-{% for category in news_list %}
-    {% for news in category %}
-        <div class="news-card">
-            <h3>
-              <a href="{{ news.link }}" target="_blank">
-                {{ news.title }}
-              </a>
-            </h3>
+  <div class="news-grid">
+    {% for news in politics_news %}
+    <article class="news-card">
+      {% if news.image %}
+      <div class="news-image-container">
+        <img src="{{ news.image }}" alt="{{ news.title }}" class="news-image" loading="lazy">
+      </div>
+      {% endif %}
 
-            {% if news.image %}
-                <img src="{{ news.image }}" width="300">
-            {% endif %}
-        </div>
+      <div class="news-content">
+        <h3 class="news-title">
+          <a href="{{ news.link }}" target="_blank" class="news-link">
+            {{ news.title }}
+          </a>
+        </h3>
+      </div>
+
+      <div class="news-footer">
+        {{ news.source }}
+      </div>
+    </article>
+    {% empty %}
+    <p>No politics news available at the moment.</p>
     {% endfor %}
-{% endfor %}
-
+  </div>
 </div>
-    
-    
+
+<!-- Economy Section -->
+<div id="economy">
+  <div class="section-header">
+    <h2 class="section-title">📉 Economy</h2>
+    <a href="{% url 'news_list' 'economy' %}" class="view-all-link">VIEW ALL »</a>
+  </div>
+
+  <div class="news-grid">
+    {% for news in financial_news %}
+    <article class="news-card">
+      {% if news.image %}
+      <div class="news-image-container">
+        <img src="{{ news.image }}" alt="{{ news.title }}" class="news-image" loading="lazy">
+      </div>
+      {% endif %}
+
+      <div class="news-content">
+        <h3 class="news-title">
+          <a href="{{ news.link }}" target="_blank" class="news-link">
+            {{ news.title }}
+          </a>
+        </h3>
+      </div>
+
+      <div class="news-footer">
+        Setopati
+      </div>
+    </article>
+    {% empty %}
+    <p>No financial news available at the moment.</p>
+    {% endfor %}
+  </div>
+</div>
+
 {% endblock %}
