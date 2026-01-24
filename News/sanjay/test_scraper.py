@@ -71,5 +71,74 @@ def ekantipur_financial():
         print(f"Ekantipur Error: {e}")
 
 if __name__ == "__main__":
-    setopati_financial()
-    ekantipur_financial()
+    # setopati_financial()
+    # ekantipur_financial()
+    
+    print("Testing NepalPress...")
+    # Test one category
+    resp = requests.get('https://www.nepalpress.com/category/business/', headers={
+        'User-Agent': 'Mozilla/5.0'
+    })
+    soup = BeautifulSoup(resp.text, 'lxml')
+    # Selector from user image: div.column-news
+    news_items = soup.find_all("div", class_="column-news")
+    print(f"Found {len(news_items)} items using 'column-news'")
+    
+    count = 0
+    for div in news_items:
+        if count >= 3: break
+        
+        # Structure from image:
+        # div.column-news > div.uk-card > a > img
+        # div.column-news > div.news-title > h3.title > a
+        
+        # Try to find the uk-card first to be safe, or just search descendants
+        uk_card = div.find("div", class_="uk-card")
+        if not uk_card:
+            print("No uk-card found in column-news")
+            continue
+            
+        # Link and Image usually in the first anchor inside uk-card (wrapper)
+        # or the image might be lazy loaded.
+        first_anchor = uk_card.find('a')
+        link = first_anchor.get('href') if first_anchor else None
+        
+        img_tag = first_anchor.find('img') if first_anchor else None
+        img_url = ""
+        if img_tag:
+             img_url = img_tag.get('data-src') or img_tag.get('src')
+        
+        # Title
+        # Siblings of uk-card? No, image showed news-title as sibling of a?
+        # Image:
+        # div.column-news
+        #   div.uk-card
+        #     a (image link)
+        #     div.news-title
+        #       h3.title
+        #         a (text)
+        
+        # So news-title IS inside uk-card ?? 
+        # Looking at indentation in image:
+        # div.column-news
+        #   div.uk-card
+        #     ::before
+        #     a href="..." (Image link)
+        #     div.news-title
+        # So yes, news-title is a sibling of the image link, INSIDE uk-card.
+        
+        title_div = uk_card.find("div", class_="news-title")
+        title = "No Title"
+        if title_div:
+            h3 = title_div.find("h3", class_="title")
+            if h3:
+                title_a = h3.find("a")
+                if title_a:
+                     title = title_a.get_text(strip=True)
+                     if not link: link = title_a.get('href')
+
+        print(f"Title: {title}")
+        print(f"Link: {link}")
+        print(f"Image: {img_url}")
+        print("-" * 20)
+        count += 1

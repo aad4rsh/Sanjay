@@ -370,16 +370,121 @@ def ekantipur_sports():
             'source': 'Ekantipur'
         })
     return combined_news
+def ekantipur_blog():
+    resp = requests.get("https://ekantipur.com/blog")
+    soup = BeautifulSoup(resp.text, 'lxml')
+    news_items = soup.find_all("div", class_="teaser offset")
+    combined_news = []
+    
+    for div in news_items:
+        h2 = div.find('h2')
+        if not h2:
+            continue
+            
+        anchor = h2.find('a')
+        if not anchor:
+            continue
+        title = anchor.get_text(strip=True)
+        link = anchor.get('href')
+        if link and not link.startswith('http'):
+            link = 'https://ekantipur.com' + link
+
+        img_url = ""
+        # The 'image' div is a sibling, not a child of 'teaser offset'.
+        # We look in the parent container.
+        parent = div.parent
+        image_div = parent.find('div', class_='image') if parent else None
+        
+        if image_div:
+            figure = image_div.find('figure')
+            if figure:
+                img_a = figure.find('a')
+                if img_a:
+                    img_tag = img_a.find('img')
+                    if img_tag:
+                         img_url = img_tag.get('data-src') or img_tag.get('src')
+                # Sometimes img is direct child of figure if not wrapped in 'a'
+                elif not img_url:
+                     img_tag = figure.find('img')
+                     if img_tag:
+                         img_url = img_tag.get('data-src') or img_tag.get('src')
+        
+        combined_news.append({
+            'title': title,
+            'link': link,
+            'image': img_url,
+            'source': 'Ekantipur'
+        })
+    return combined_news
+
+def scrape_nepalpress(url):
+    try:
+        resp = requests.get(url, headers={
+            'User-Agent': 'Mozilla/5.0'
+        })
+        soup = BeautifulSoup(resp.text, 'lxml')
+        news_items = soup.find_all("div", class_="column-news")
+        combined_news = []
+        for div in news_items:
+            uk_card = div.find("div", class_="uk-card")
+            if not uk_card:
+                continue
+            
+            # Title
+            title_div = uk_card.find("div", class_="news-title")
+            if not title_div:
+                continue
+            h3 = title_div.find("h3", class_="title")
+            if not h3:
+                continue
+            title_a = h3.find("a")
+            if not title_a:
+                continue
+            
+            title = title_a.get_text(strip=True)
+            link = title_a.get('href')
+            
+            # Image
+            img_tag = uk_card.find('img')
+            img_url = ""
+            if img_tag:
+                 img_url = img_tag.get('data-src') or img_tag.get('src')
+            
+            combined_news.append({
+                'title': title,
+                'link': link,
+                'image': img_url,
+                'source': 'NepalPress'
+            })
+        return combined_news
+    except Exception as e:
+        print(f"NepalPress Error {url}: {e}")
+        return []
+
+def nepalpress_politics():
+    return scrape_nepalpress('https://www.nepalpress.com/category/political/')
+
+def nepalpress_financial():
+    return scrape_nepalpress('https://www.nepalpress.com/category/business/')
+
+def nepalpress_global():
+    return scrape_nepalpress('https://www.nepalpress.com/category/international/')
+
+def nepalpress_sports():
+    return scrape_nepalpress('https://www.nepalpress.com/category/sports/')
+
+def nepalpress_blog():
+    return scrape_nepalpress('https://www.nepalpress.com/category/literature/')
 def home(request):  
-    politics_news = setopati_news() + ekantipur_politics()
+    politics_news = setopati_news() + ekantipur_politics() + nepalpress_politics()
     random.shuffle(politics_news)
-    financial_news = setopati_financial() + ekantipur_financial()
+    financial_news = setopati_financial() + ekantipur_financial() + nepalpress_financial()
     random.shuffle(financial_news)
-    global_news = setopati_global() + ekantipur_global()
+    global_news = setopati_global() + ekantipur_global() + nepalpress_global()
     random.shuffle(global_news)
-    sports_news = setopati_sports() + ekantipur_sports()
+    sports_news = setopati_sports() + ekantipur_sports() + nepalpress_sports()
     random.shuffle(sports_news)
-    blog_news = setopati_blog()
+    blog_news = setopati_blog() + ekantipur_blog() + nepalpress_blog()
     random.shuffle(blog_news)
     
     # General news mixes everything
@@ -397,23 +502,24 @@ def home(request):
 def news_list(request, category):
     """View for displaying all news articles of a specific category"""
     if category == 'politics':
-        news = setopati_news() + ekantipur_politics()
+        news = setopati_news() + ekantipur_politics() + nepalpress_politics()
         random.shuffle(news)
         title = "Politics News"
     elif category == 'economy':
-        news = setopati_financial() + ekantipur_financial()
+        news = setopati_financial() + ekantipur_financial() + nepalpress_financial()
         random.shuffle(news)
         title = "Economy News"
     elif  category  == 'global':
-        news = setopati_global() + ekantipur_global()
+        news = setopati_global() + ekantipur_global() + nepalpress_global()
         random.shuffle(news)
         title = "Global News"
     elif category == 'sports':
-        news = setopati_sports() + ekantipur_sports()
+        news = setopati_sports() + ekantipur_sports() + nepalpress_sports()
         random.shuffle(news)
         title = "Sports News"
     elif category == 'blog':
-        news = setopati_blog()
+        news = setopati_blog() + ekantipur_blog() + nepalpress_blog()
+        random.shuffle(news)
         title = "Blog News"
 
     else:
